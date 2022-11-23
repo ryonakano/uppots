@@ -15,7 +15,7 @@ shift 2
 SOURCE_PATH="$*"
 
 cd $PROJECT_PATH
-FILES=($(find $SOURCE_PATH -type f | xargs egrep -l "${QUERY}" | sort))
+FILES=($(find $SOURCE_PATH -type f | xargs egrep -l "${QUERY}" | sort -V))
 
 truncate --size=0 $POTFILES_PATH
 
