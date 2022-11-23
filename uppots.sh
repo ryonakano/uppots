@@ -1,5 +1,5 @@
 #!/bin/bash
-# UpPots: Detect *.vala files with gettext syntax and update POTFILES accordingly
+# uppots: Detect *.vala files with gettext syntax and update POTFILES accordingly
 
 # The gettext functions in Vala
 QUERY="((|Q|N|NC)\_|(d|dc|n|dn)gettext|dpgettext(2)?)\s?\(\""

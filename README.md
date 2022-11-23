@@ -1,6 +1,6 @@
-# UpPOTs
+# uppots
 Detect *.vala files with gettext syntax and update POTFILES accordingly
 
 ```
-Usage: uppots [source root path]
+Usage: uppots.sh [project path] [POFILES path] [source path...]
 ```
