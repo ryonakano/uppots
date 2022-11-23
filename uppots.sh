@@ -4,17 +4,21 @@
 # The gettext functions in Vala
 QUERY="((|Q|N|NC)\_|(d|dc|n|dn)gettext|dpgettext(2)?)\s?\(\""
 
-if [[ $# -lt 2 ]]; then
-	echo "Usage: uppots [project path] [search path...]"
+if [[ $# -lt 3 ]]; then
+	echo "Usage: $(basename $0) [project path] [POFILES path] [source path...]"
 	exit 1
 fi
 
-cd "$1"
-FILES=($(find ${@:2} -type f | xargs egrep -l "${QUERY}" | sort))
+PROJECT_PATH="$1"
+POTFILES_PATH="$2"
+shift 2
+SOURCE_PATH="$*"
 
-POTFILES=po/POTFILES
-truncate --size=0 $POTFILES
+cd $PROJECT_PATH
+FILES=($(find $SOURCE_PATH -type f | xargs egrep -l "${QUERY}" | sort))
+
+truncate --size=0 $POTFILES_PATH
 
 for FILE in ${FILES[@]}; do
-	echo ${FILE#./} >> $POTFILES
+	echo ${FILE#./} >> $POTFILES_PATH
 done
