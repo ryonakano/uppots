@@ -1,9 +1,6 @@
 #!/bin/bash
 # uppots: Detect *.vala files with gettext syntax and update POTFILES accordingly
 
-# The gettext functions in Vala
-QUERY="((|Q|N|NC)\_|(d|dc|n|dn)gettext|dpgettext(2)?)\s?\(\""
-
 usage()
 {
 	echo "Usage: $(basename $0) [project path] [POFILES path] [source path...]"
@@ -21,23 +18,34 @@ remove_source()
 	sed -i -e "s@^\($SOURCE_REG\).*@@g" -e "/^$/d" $POTFILES
 }
 
+add_source()
+{
+	local -r POTFILES="$1"
+	local -r SOURCE="$2"
+	# The gettext functions in Vala
+	local -r L10N_QUERY="((|Q|N|NC)_|(d|dc|n|dn)gettext|dpgettext(2)?)\s?\(\""
+
+	local -r L10N_SOURCES=($(find $SOURCE_PATH -type f | xargs grep -l -E "${L10N_QUERY}" | sort -V))
+
+	for L10N_SOURCE in ${L10N_SOURCES[@]}; do
+		echo ${L10N_SOURCE#./} >> $POTFILES_PATH
+	done
+}
+
 if [ $# -lt 3 ]; then
 	usage
 fi
 
-PROJECT_PATH="$1"
-POTFILES_PATH="$2"
+readonly PROJECT_PATH="$1"
+readonly POTFILES_PATH="$2"
 shift 2
-SOURCE_PATH="$*"
+readonly SOURCE_PATH="$*"
 
-cd $PROJECT_PATH
+pushd $PROJECT_PATH > /dev/null
 
 remove_source $POTFILES_PATH "$SOURCE_PATH"
-
-FILES=($(find $SOURCE_PATH -type f | xargs egrep -l "${QUERY}" | sort -V))
-
-for FILE in ${FILES[@]}; do
-	echo ${FILE#./} >> $POTFILES_PATH
-done
+add_source $POTFILES_PATH "$SOURCE_PATH"
 
 sort $POTFILES_PATH -o $POTFILES_PATH
+
+popd > /dev/null # PROJECT_PATH
