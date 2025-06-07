@@ -23,6 +23,7 @@ add_source()
 	local -r POTFILES="$1"
 	local -r SOURCE="$2"
 	# The gettext functions in Vala
+	# See also: https://www.gnu.org/software/gettext/manual/html_node/Vala.html
 	local -r L10N_QUERY="((|Q|N|NC)_|(d|dc|n|dn)gettext|dpgettext(2)?)\s?\(\""
 
 	local -r L10N_SOURCES=($(find $SOURCE_PATH -type f | xargs grep -l -E "${L10N_QUERY}" | sort -V))
