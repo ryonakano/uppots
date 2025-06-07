@@ -26,10 +26,10 @@ add_source()
 	# See also: https://www.gnu.org/software/gettext/manual/html_node/Vala.html
 	local -r L10N_QUERY="((|Q|N|NC)_|(d|dc|n|dn)gettext|dpgettext(2)?)\s?\(\""
 
-	local -r L10N_SOURCES=($(find $SOURCE_PATH -type f | xargs grep -l -E "${L10N_QUERY}" | sort -V))
+	local -r L10N_SOURCES=($(find $SOURCE -type f | xargs grep -l -E "${L10N_QUERY}" | sort -V))
 
 	for L10N_SOURCE in ${L10N_SOURCES[@]}; do
-		echo ${L10N_SOURCE#./} >> $POTFILES_PATH
+		echo ${L10N_SOURCE#./} >> $POTFILES
 	done
 }
 
