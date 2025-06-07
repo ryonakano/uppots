@@ -4,6 +4,12 @@
 # The gettext functions in Vala
 QUERY="((|Q|N|NC)\_|(d|dc|n|dn)gettext|dpgettext(2)?)\s?\(\""
 
+usage()
+{
+	echo "Usage: $(basename $0) [project path] [POFILES path] [source path...]"
+	exit 1
+}
+
 # Remove files under the source paths from POTFILES
 remove_source()
 {
@@ -15,9 +21,8 @@ remove_source()
 	sed -i -e "s@^\($SOURCE_REG\).*@@g" -e "/^$/d" $POTFILES
 }
 
-if [[ $# -lt 3 ]]; then
-	echo "Usage: $(basename $0) [project path] [POFILES path] [source path...]"
-	exit 1
+if [ $# -lt 3 ]; then
+	usage
 fi
 
 PROJECT_PATH="$1"
